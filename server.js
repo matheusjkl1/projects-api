@@ -5,13 +5,6 @@ const express = require('express');
 const multer = require('multer');
 const modelProject = require('./models/modelProjects');
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, callback) => { callback(null, 'uploads/'); },
-  filename: (req, _file, callback) => { callback(null, `${req.body.name}.jpeg`); },
-});
-
-const upload = multer({ storage });
-
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -19,7 +12,16 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.static(`${__dirname}/public`));
 
+app.use('/uploads', express.static('uploads'));
+
 app.set('views', path.join(__dirname, 'views'));
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, callback) => { callback(null, 'uploads/'); },
+  filename: (req, _file, callback) => { callback(null, `${new Date().toISOString()}.jpeg`); },
+});
+
+const upload = multer({ storage });
 
 app.get('/projects', async (_, res) => {
   const getProjetcts = await modelProject.getAll();
@@ -31,21 +33,21 @@ app.get('/projects', async (_, res) => {
 
 app.post('/projects', upload.single('file'), async (req, res) => {
   const { file, body: { name, gitUrl, sinopse } } = req;
-  const response = await modelProject.create(name, file, gitUrl, sinopse);
+  const response = await modelProject.create(name, file.path, gitUrl, sinopse);
 
   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
 
   return res.status(201).json(response);
 });
 
-app.post('/images', upload.single('file'), async (req, res) => {
-  const { file } = req;
-  const response = await modelProject.uploadImage(file);
+// app.post('/images', upload.single('file'), async (req, res) => {
+//   const { file } = req;
+//   const response = await modelProject.uploadImage(file);
 
-  if (!response) return res.status(400).json({ message: 'Dados inválidos' });
+//   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
 
-  return res.status(201).json(response);
-});
+//   return res.status(201).json(response);
+// });
 
 app.get('/projects', async (_, res) => {
   const response = await modelProject.getAll();
