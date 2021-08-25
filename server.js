@@ -37,7 +37,7 @@ app.post('/projects', upload.single('file'), async (req, res) => {
       name, url, gitUrl, sinopse,
     },
   } = req;
-  console.log(url);
+  // console.log(url);
   const response = await modelProject.create(name, file.path, url, gitUrl, sinopse);
 
   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
