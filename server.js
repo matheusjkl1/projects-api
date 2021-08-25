@@ -32,22 +32,18 @@ app.get('/projects', async (_, res) => {
 });
 
 app.post('/projects', upload.single('file'), async (req, res) => {
-  const { file, body: { name, gitUrl, sinopse } } = req;
-  const response = await modelProject.create(name, file.path, gitUrl, sinopse);
+  const {
+    file, body: {
+      name, url, gitUrl, sinopse,
+    },
+  } = req;
+  console.log(url);
+  const response = await modelProject.create(name, file.path, url, gitUrl, sinopse);
 
   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
 
   return res.status(201).json(response);
 });
-
-// app.post('/images', upload.single('file'), async (req, res) => {
-//   const { file } = req;
-//   const response = await modelProject.uploadImage(file);
-
-//   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
-
-//   return res.status(201).json(response);
-// });
 
 app.get('/projects', async (_, res) => {
   const response = await modelProject.getAll();

@@ -24,19 +24,14 @@ const getAll = async () => {
     });
 };
 
-const create = async (name, img, gitUrl, sinopse) => await connection().then((db) => db
+const create = async (name, img, url, gitUrl, sinopse) => await connection().then((db) => db
   .collection('front-end')
   .insertOne({
-    name, img, gitUrl, sinopse,
+    name, img, url, gitUrl, sinopse,
   })).catch((err) => (err));
-
-const uploadImage = async (file) => await connection().then((db) => db
-  .collection('images')
-  .insertOne({ file })).catch((err) => (err));
 
 module.exports = {
   getAll,
   create,
-  uploadImage,
   connTest,
 };
