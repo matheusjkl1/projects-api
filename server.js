@@ -5,6 +5,10 @@ const express = require('express');
 const multer = require('multer');
 const modelProject = require('./models/modelProjects');
 
+require('dotenv').config();
+
+const { DB_URL } = process.env;
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -18,17 +22,19 @@ app.set('views', path.join(__dirname, 'views'));
 
 const storage = multer.diskStorage({
   destination: (_req, _file, callback) => { callback(null, 'uploads/'); },
-  filename: (req, _file, callback) => { callback(null, `${new Date().toISOString()}.jpeg`); },
+  filename: (_req, _file, callback) => { callback(null, `${new Date().toISOString()}.jpeg`); },
 });
 
 const upload = multer({ storage });
 
 app.get('/projects', async (_, res) => {
-  const getProjetcts = await modelProject.getAll();
+  const response = await modelProject.getAll();
 
-  if (!getProjetcts) return res.status(400).json('Error');
+  if (!response) return res.status(400).json({ message: 'Nao a projetos' });
 
-  return res.status(200).json(getProjetcts);
+  console.log(`Banco de dados ${DB_URL}`);
+
+  return res.status(200).json(response);
 });
 
 app.post('/projects', upload.single('file'), async (req, res) => {
@@ -45,12 +51,4 @@ app.post('/projects', upload.single('file'), async (req, res) => {
   return res.status(201).json(response);
 });
 
-app.get('/projects', async (_, res) => {
-  const response = await modelProject.getAll();
-
-  if (!response) return res.status(400).json({ message: 'Nao a projetos' });
-
-  return res.status(200).json(response);
-});
-
-app.listen(PORT, () => (`Servidor Ligado na porta ${PORT}`));
+app.listen(PORT, () => (`Servidor Ligado na porta ${PORT} ----`));
