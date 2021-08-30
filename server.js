@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
@@ -44,4 +45,4 @@ app.post('/projects', upload.single('file'), async (req, res) => {
   return res.status(201).json(response);
 });
 
-app.listen(PORT, () => (`Servidor Ligado na porta ${PORT} ----`));
+app.listen(PORT, () => (console.log(`Servidor Ligado na porta ${PORT} `)));
