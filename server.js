@@ -5,10 +5,6 @@ const express = require('express');
 const multer = require('multer');
 const modelProject = require('./models/modelProjects');
 
-require('dotenv').config();
-
-const { DB_URL } = process.env;
-
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -32,8 +28,6 @@ app.get('/projects', async (_, res) => {
 
   if (!response) return res.status(400).json({ message: 'Nao a projetos' });
 
-  console.log(`Banco de dados ${DB_URL}`);
-
   return res.status(200).json(response);
 });
 
@@ -43,7 +37,6 @@ app.post('/projects', upload.single('file'), async (req, res) => {
       name, url, gitUrl, sinopse,
     },
   } = req;
-  // console.log(url);
   const response = await modelProject.create(name, file.path, url, gitUrl, sinopse);
 
   if (!response) return res.status(400).json({ message: 'Dados inválidos' });

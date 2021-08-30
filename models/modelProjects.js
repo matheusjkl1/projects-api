@@ -11,12 +11,13 @@ const getAll = async () => {
     .then((db) => db.collection('front-end').find().toArray())
     .then((items) => {
       return items.map(({
-        _id, name, img, gitUrl, sinopse,
+        _id, name, img, url, gitUrl, sinopse,
       }) => {
         return {
           id: _id,
           name,
           img,
+          url,
           gitUrl,
           sinopse,
         };
