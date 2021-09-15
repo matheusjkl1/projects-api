@@ -24,16 +24,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.get('/banner', async (_, res) => {
-  const randomNumber = Math.floor(Math.random() * 10 + 1);
-
-  return res.status(200).json({ img: `uploads/${randomNumber}.png` });
-});
-
 app.get('/projects', async (_, res) => {
   const response = await modelProject.getAll();
 
-  if (!response) return res.status(400).json({ message: 'Nao a projetos' });
+  if (!response) return res.status(400).json({ message: 'Sem projetos' });
 
   return res.status(200).json(response);
 });
