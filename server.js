@@ -35,10 +35,10 @@ app.get('/projects', async (_, res) => {
 app.post('/projects', upload.single('file'), async (req, res) => {
   const {
     file, body: {
-      name, url, gitUrl, sinopse,
+      name, url, gitUrl, sinopse, stacks,
     },
   } = req;
-  const response = await modelProject.create(name, file.path, url, gitUrl, sinopse);
+  const response = await modelProject.create(name, file.path, url, gitUrl, sinopse, stacks);
 
   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
 

@@ -11,7 +11,7 @@ const getAll = async () => {
     .then((db) => db.collection('front-end').find().toArray())
     .then((items) => {
       return items.map(({
-        _id, name, img, url, gitUrl, sinopse,
+        _id, name, img, url, gitUrl, sinopse, stacks,
       }) => {
         return {
           id: _id,
@@ -20,15 +20,16 @@ const getAll = async () => {
           url,
           gitUrl,
           sinopse,
+          stacks,
         };
       });
     });
 };
 
-const create = async (name, img, url, gitUrl, sinopse) => await connection().then((db) => db
+const create = async (name, img, url, gitUrl, sinopse, stacks) => await connection().then((db) => db
   .collection('front-end')
   .insertOne({
-    name, img, url, gitUrl, sinopse,
+    name, img, url, gitUrl, sinopse, stacks,
   })).catch((err) => (err));
 
 module.exports = {
