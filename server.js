@@ -24,8 +24,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.get('/projects', async (_, res) => {
-  const response = await modelProject.getAll();
+app.get('/front-end/projects', async (_, res) => {
+  const response = await modelProject.getAllFront();
+
+  if (!response) return res.status(400).json({ message: 'Sem projetos' });
+
+  return res.status(200).json(response);
+});
+
+app.get('/back-end/projects', async (_, res) => {
+  const response = await modelProject.getAllBack();
 
   if (!response) return res.status(400).json({ message: 'Sem projetos' });
 
@@ -35,11 +43,10 @@ app.get('/projects', async (_, res) => {
 app.post('/projects', upload.single('file'), async (req, res) => {
   const {
     file, body: {
-      name, url, gitUrl, sinopse, stacks,
+      name, url, gitUrl, sinopse, stacks, type,
     },
   } = req;
-  const response = await modelProject.create(name, file.path, url, gitUrl, sinopse, stacks);
-
+  const response = await modelProject.create(name, file.path, url, gitUrl, sinopse, stacks, type);
   if (!response) return res.status(400).json({ message: 'Dados inválidos' });
 
   return res.status(201).json(response);
