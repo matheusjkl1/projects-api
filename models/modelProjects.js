@@ -57,7 +57,7 @@ const create = async (name, img, url, gitUrl, sinopse, stacks, type) => {
     return response;
   }
   const response = await connection().then((db) => db
-    .collection('back')
+    .collection('back-end')
     .insertOne({
       name, img, url, gitUrl, sinopse, stacks,
     })).catch((err) => (err));
